@@ -40,6 +40,8 @@ public class General {
     
 	public static void main(String[] args) {
 		General.startPlay();
+		
+		
 		for(int i = 0; i < piocheCarte.size();i++){
 		System.out.println(piocheCarte.get(i));
 		}
