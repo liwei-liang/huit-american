@@ -9,13 +9,13 @@ public class Carte {
 	private String couleur;
 	private String valeur;
 	private String couleurValeur;  //花色数值
-	private String position;  //牌的位置：玩家手中或牌堆或弃牌堆
+	//private String position;  //牌的位置：玩家手中或牌堆或弃牌堆
 	
 	public Carte(String couleur, String valeur ){//构造器 设定花色和数值
 		this.couleur = couleur;
 		this.valeur = valeur;
 		this.couleurValeur = couleur + valeur;
-		this.position = "pioche";
+		//this.position = "pioche";
 	}
 	
 	public String getValeur(){//得到数值
@@ -30,8 +30,12 @@ public class Carte {
 		return this.couleurValeur;
 	}
 	
-	public void goInPioche(){//设定牌的位置 牌堆
+	/*public void goInPioche(){//设定牌的位置 牌堆
 		this.position = "pioche";
+	}
+	
+	public void played(){//被打出
+		
 	}
 	
 	public void goInHand(){//设定牌的位置 玩家手中
@@ -44,11 +48,8 @@ public class Carte {
 	
 	public String getPosition(){//得到牌的位置
 		return this.position;
-	}
+	}*/
 	
-	public void played(){//被打出
-		
-	}
-	
+
 	
 }

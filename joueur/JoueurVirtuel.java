@@ -8,6 +8,7 @@ public class JoueurVirtuel extends Joueur {
 	}
 
 	public void jouerUnCarte(){//虚拟玩家出一张牌
-		
+		//canBePlayedCarte
+		//System.out.println();
 	}
 }

@@ -29,7 +29,7 @@ public class Joueur {
 		return this.virtuelOrNot;
 	}
 	
-	public void jouerUnCarte(){//父类提供出牌方法体 子类重写
+	public void jouerUnCarte(){//出牌 父类提供出牌方法体 子类重写
 		
 	}
 	
@@ -37,7 +37,7 @@ public class Joueur {
 		
 	}
 	
-	public void piocheCarte(int numberAPiocher){//抽排 形参为抽牌数
+	public static void piocheCarte(int numberAPiocher){//抽排 静态方法 形参为抽牌数
 		
 	}
 	
