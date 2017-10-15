@@ -3,10 +3,11 @@ package joueur;
 public class JoueurVirtuel extends Joueur {
 	
 	public JoueurVirtuel(String name){
-		
+		this.Name = name;
+		this.virtuelOrNot = true;
 	}
 
-	public void jouerUnCarte(String unCarte){//虚拟玩家出一张牌
+	public void jouerUnCarte(){//虚拟玩家出一张牌
 		
 	}
 }

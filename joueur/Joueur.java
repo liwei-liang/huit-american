@@ -1,27 +1,36 @@
 package joueur;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import carte.Carte;
 
 public class Joueur {
 	public String Name;
 	public int Number; 
-	public List<Carte> carteInhand;  //手牌
+	public ArrayList<Carte> carteInhand = new ArrayList<>();  //手牌 选arraylist因为手里任意的牌都可以出 随机访问比较快
 	public int nombreCarteInHand;  //手牌数
 	public boolean virtuelOrNot;  //是否为虚拟玩家
+	public LinkedList<Carte> canBeplayedCardInHand = new LinkedList<>();//手中可以被打出的牌 因为需要频繁删除增加 所以用linkedlist
 	
 	public void setName(String name){//设置姓名
 		
 	}
 	
 	public String getName(){//获取姓名
-		return "Mark";
+		return this.Name;
 	}
 	
 	public int getNumber(){//获取号码
-		return 30;
+		return this.Number;
+	}
+	
+	public boolean getVirtuelOrNot(){
+		return this.virtuelOrNot;
+	}
+	
+	public void jouerUnCarte(){//父类提供出牌方法体 子类重写
+		
 	}
 	
 	public void contre(){//反对一个手牌数为一张且没有声明的玩家
@@ -36,9 +45,8 @@ public class Joueur {
 		
 	}
 	
-	public List<Carte> gerHandCarte(){//获得该玩家当前手牌信息
-		List<Carte> ls = new LinkedList<Carte>();
-		return ls;
+	public ArrayList<Carte> gerHandCarte(){//获得该玩家当前手牌信息
+		return this.carteInhand;
 	}
 	
 	

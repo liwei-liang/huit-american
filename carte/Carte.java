@@ -2,9 +2,10 @@ package carte;
 
 public class Carte {
 
-	public static  String[] couleurType = { "Pique", "Coeur", "Trefle", "Carreau"};
-	public static  String[] nromalvaleurType = { "3", "4", "5", "6","9","Q", "K"};
-	public static  String[] specialvaleurType = { "1", "2","7", "8","10", "J"};
+	public static  String[] couleurType = { "Pique", "Coeur", "Trefle", "Carreau"};//花色
+	public static  String[] nromalvaleurType = { "3", "4", "5", "6","9","Q", "K"};//非功能排的点数
+	public static  String[] specialvaleurType = { "1", "2","7", "8","10", "J"};//功能牌的点数
+	public static  String[] allvaleurType = { "1", "2","3", "4", "5", "6","7","8","9","10", "J", "Q", "K"};//所有牌的点数
 	private String couleur;
 	private String valeur;
 	private String couleurValeur;  //花色数值
@@ -18,23 +19,31 @@ public class Carte {
 	}
 	
 	public String getValeur(){//得到数值
-		return "As";
+		return this.valeur;
 	}
 	
 	public String getCouleur(){//得到花色
-		return "Pique";
+		return this.couleur;
 	}
 	
 	public String getCouVale(){//得到花色数值
-		return "Carreau1";
+		return this.couleurValeur;
 	}
 	
-	public void setPosition(String pos){//设定牌的位置
-		
+	public void goInPioche(){//设定牌的位置 牌堆
+		this.position = "pioche";
+	}
+	
+	public void goInHand(){//设定牌的位置 玩家手中
+		this.position = "hand";
+	}
+	
+	public void goInTable(){//设定牌的位置 弃牌堆
+		this.position = "table";
 	}
 	
 	public String getPosition(){//得到牌的位置
-		return "wait";
+		return this.position;
 	}
 	
 	public void played(){//被打出

@@ -1,27 +1,45 @@
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Scanner;
+
 import carte.*;
+import joueur.Joueur;
+import joueur.JoueurPhysique;
+import joueur.JoueurVirtuel;
 
 
 public class General {
 	
-	private static int nombreJoueur;
-    public static int nombreRestCarte; 
-    public static List<Carte> piocheCarte = new LinkedList<>(); 
-    public static List<Carte> playedCarte = new LinkedList<>(); 
-    public static List<Carte> canBePlayedCarte = new LinkedList<>();
-    public static Carte lastPlayedCarte; 
-    public static void shuffle(List<Carte> carte){ //洗牌模块
+	private static int gameOver = 0;//玩家数目
+	private static int nombreJoueur = 1;//玩家数目
+    public static int nombreRestCarte; //牌堆剩下的牌数
+    public static String[] robName = {"Mary" , "Jack", "Steph", "Clay", "Kevin", "Marvin","FoutyTwo"}; //预设虚拟玩家姓名
+    public static LinkedList<Carte> piocheCarte = new LinkedList<>();//牌堆里的牌的集合 按顺序排列
+    public static LinkedList<Carte> playedCarte = new LinkedList<>(); //弃牌堆里的牌集合
+    public static LinkedList<Carte> canBePlayedCarte = new LinkedList<>();//可以被打出的牌的集合
+    public static ArrayList<Joueur> joueurTotal = new ArrayList<>(); //玩家集合 过程中不会变动 方便调用选Arraylist
+    public static Carte lastPlayedCarte; //最后一张被打出的牌
+    
+    
+    public static void shuffle(LinkedList<Carte> carte){ //洗牌模块
     	Collections.shuffle(carte);
     }
     
-    public static void addJoueur(){//添加虚拟玩家
-    	
+    public static Carte lastPlayedCarte(){
+    	return playedCarte.getLast();
     }
     
+    public static void addJoueur(){//添加虚拟玩家
+    	joueurTotal.add(new JoueurVirtuel(robName[nombreJoueur-1]));//虚拟玩家集合中添加新玩家
+    	System.out.println("玩家" + robName[nombreJoueur-1] + "进入游戏" );
+    	General.nombreJoueur ++;
+    }
+    //public static void 发牌
     public static void startPlay(){//开始游戏 待定模块
     	//初始化卡组
+    	System.out.println("游戏开始，玩的开心");
     	for(int i = 0; i < Carte.couleurType.length; i++ ){
     		piocheCarte.add(new As(Carte.couleurType[i], "1"));//特殊功能牌单独添加
     		piocheCarte.add(new Deux(Carte.couleurType[i], "2"));
@@ -35,17 +53,92 @@ public class General {
     	}
     	//洗牌
     	General.shuffle(piocheCarte);
+    	
+    	Scanner scanner = new Scanner(System.in);
+    	System.out.println("请输入你想添加的虚拟玩家数目（2-5）:");
+    	
+    	while(true){//使玩家只能输入2到5个游戏人数
+    		try{
+    			int nombreJoueurSet = scanner.nextInt();
+    			if(nombreJoueurSet > 1 && nombreJoueurSet < 6){
+        			for(int i =0; i< nombreJoueurSet - 1;i++){//调用添加虚拟玩家模块 添加用户希望的游戏人数
+        				General.addJoueur();
+        			}
+        			//创建用户自己
+        	    	System.out.println("您进入游戏");
+        	    	System.out.println("请输入您的姓名:");
+        			String m=scanner.next();
+        			JoueurPhysique meJoueurPhysique = new JoueurPhysique(m);//添加物理玩家
+        			joueurTotal.add(meJoueurPhysique);
+        	    	scanner.close();
+        			break;	//结束while循环
+    			}else{
+        		    System.out.println("玩家人数只能在2-5人之间,请重新输入:");
+    				continue;
+    			}
+
+    		}
+    		catch(InputMismatchException exp){
+    		    System.out.println("只能输入数字2-5,请重新输入:");
+    		    String m=scanner.next();
+    		}//try
+    	
+    	}//while
+       //分发手牌 每人先发8张
+    	for(int j = 0; j < 8; j++){
+    		for(int i = 0; i <joueurTotal.size(); i++ ){
+    			joueurTotal.get(i).carteInhand.add(piocheCarte.pop());
+    		}//for
+    	}//for
+    	lastPlayedCarte = piocheCarte.pop();//发牌之后翻开牌堆第一张牌
+    	for (int i = 0; i < 13; i++  ){//游戏刚开始 第一个玩家可出的牌的类型
+    	canBePlayedCarte.add(new Carte(lastPlayedCarte.getCouleur(), Carte.allvaleurType[i]));//添加同花色的牌
+    	}
+    	for (int i = 0; i < 4; i++  ){//游戏刚开始 第一个玩家可出的牌的类型
+    	canBePlayedCarte.add(new Carte(Carte.couleurType[i], lastPlayedCarte.getValeur()));//添加同点数的牌
+    	}
+    	
+    	General.Playing();//进入牌局
     }
     
+    public static void Playing(){//正在游戏的大循环
+    	int whoToPlay = 0;
+    	while(true){//游戏运行过程 不停调用出牌方法
+    		joueurTotal.get(whoToPlay).jouerUnCarte();
+    		if(whoToPlay < nombreJoueur-1){
+    			whoToPlay ++;
+    		}
+    		else{
+    			whoToPlay = 0;
+    		}//else
+    		if(gameOver == 1){//游戏结束退出程序
+    			return;
+    		}
+    	}//while
+    }
+    
+    public static void GameOver(){//游戏结束 gameover值变为一
+    	General.gameOver = 1;
+    }
     
 	public static void main(String[] args) {
-		General.startPlay();
-		
-		
-		for(int i = 0; i < piocheCarte.size();i++){
-		System.out.println(piocheCarte.get(i));
+		Scanner sc = new Scanner(System.in);
+		System.out.println("是否开始游戏(Y/N):");
+		String m=sc.next();
+		if(m.equals("Y")){
+
+			General.startPlay();
+		}
+		for(int i = 0; i < piocheCarte.size();i++){//test
+		System.out.println(piocheCarte.get(i).getCouVale());
 		}
 		System.out.println(piocheCarte.size());
+		for(int i = 0; i < joueurTotal.size();i++){//test
+			System.out.println(joueurTotal.get(i).getName());
+			System.out.println(joueurTotal.get(i).gerHandCarte().get(i).getCouVale());
+			}
+		sc.close();
+		//lastPlayedCarte = piocheCarte.pop();//测试翻开的那张牌
+		//System.out.println(lastPlayedCarte.getCouVale());
 	}
-	
 }
