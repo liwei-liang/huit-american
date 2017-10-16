@@ -24,8 +24,9 @@ public class General {
     public static Carte lastPlayedCarte; //最后一张被打出的牌
     
     
-    public static void shuffle(LinkedList<Carte> carte){ //洗牌模块
+    public static LinkedList<Carte> shuffle(LinkedList<Carte> carte){ //洗牌模块
     	Collections.shuffle(carte);
+    	return carte;
     }
     
     public static Carte lastPlayedCarte(){
@@ -91,29 +92,21 @@ public class General {
     		}//for
     	}//for
     	lastPlayedCarte = piocheCarte.pop();//发牌之后翻开牌堆第一张牌
-    	for (int i = 0; i < 13; i++  ){//游戏刚开始 初始化第一个玩家可出的牌的类型 
-    	    if(i == 8){//8这张牌比较特殊 先排除防止之后重复添加
-    	    	continue;
-    	    }
-    		canBePlayedCarte.add(new Carte(lastPlayedCarte.getCouleur(), Carte.allvaleurType[i]));//添加同花色的牌
-    	}//for
-    	for (int i = 0; i < 4; i++  ){//游戏刚开始 第一个玩家可出的牌的类型
-    		if(lastPlayedCarte.getValeur().equals("8")){//同样的 点数是8的牌也先排除 防止之后重复添加
-    			canBePlayedCarte.add(new Carte(Carte.couleurType[i], lastPlayedCarte.getValeur()));//如果被翻开的牌是8 仅向可打的牌里添加所有8
-    		}
-    		else{// if
-    			canBePlayedCarte.add(new Carte(Carte.couleurType[i], lastPlayedCarte.getValeur()));//如果被翻开的牌不是8 则不仅向可打的牌里添加所有8 还需要添加所有同点数的其他花色的牌
-    			canBePlayedCarte.add(new Carte(Carte.couleurType[i], "8"));//这里不需担心添加进了已经打出的牌 因为玩家手里本来也不可能有已经被打出的牌
-    		}// if
-    	}//for
 	    System.out.println("初始化结束");
-    	General.Playing();//进入牌局
+		System.out.println("被翻开的牌是:" + lastPlayedCarte.getCouVale());//提示上一张被打出的牌
+    	General.Playing();//进入牌局出牌大循环
     }
     
     public static void Playing(){//正在游戏的大循环
     	int whoToPlay = 0;
     	while(true){//游戏运行过程 不停调用出牌方法
-    		joueurTotal.get(whoToPlay).jouerUnCarte();
+    		joueurTotal.get(whoToPlay).jouerUnCarte();//出牌模块
+    		if(joueurTotal.get(whoToPlay).getNumCarteInhand() == 0){//该玩家手牌数为0 游戏结束 该玩家获胜
+    			System.out.println("游戏结束," + joueurTotal.get(whoToPlay).getName() + "获得胜利!");
+    			break;
+    		}
+    		System.out.println("\n上一张被打出的牌是:" + lastPlayedCarte.getCouVale());//提示上一张被打出的牌
+    		//进入下一个玩家回合
     		if(whoToPlay < nombreJoueur-1){
     			whoToPlay ++;
     		}
@@ -125,29 +118,19 @@ public class General {
     		}
     	}//while
     }
-    
-    public static void GameOver(){//游戏结束 gameover值变为一
-    	General.gameOver = 1;
-    }
+  
     
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("是否开始游戏(Y/N):");
 		String m=sc.next();
-		if(m.equals("Y")){
-
-			General.startPlay();
+		if(m.equals("Y") || m.equals("y") || m.equals("yes") || m.equals("Yes")|| m.equals("YES")){
+			General.startPlay();//启动游戏
+		}else{
+			System.out.println("游戏已退出 请重新运行");
 		}
-		//测试
-		/*for(int i = 0; i < piocheCarte.size();i++){//test
-		System.out.println(piocheCarte.get(i).getCouVale());
-		}
-		System.out.println(piocheCarte.size());
-		for(int i = 0; i < joueurTotal.size();i++){//test
-			System.out.println(joueurTotal.get(i).getName());
-			System.out.println(joueurTotal.get(i).gerHandCarte().get(i).getCouVale());
-			}*/
-		//lastPlayedCarte = piocheCarte.pop();//测试翻开的那张牌
-		//System.out.println(lastPlayedCarte.getCouVale());
-	}
+        sc.close();
+	}//main
+	
+	
 }
