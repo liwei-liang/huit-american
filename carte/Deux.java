@@ -6,7 +6,7 @@ public class Deux extends Carte {
 		super(couleur,valeur);
 	}
 	
-	public void annulerAttaque(){//使前一个玩家的攻击无效
+	public static void annulerAttaque(){//使前一个玩家的攻击无效
 		
 	}
 

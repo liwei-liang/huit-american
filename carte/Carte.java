@@ -8,6 +8,7 @@ public class Carte {
 	public static  String[] allvaleurType = { "1", "2","3", "4", "5", "6","7","8","9","10", "J", "Q", "K"};//所有牌的点数
 	private String couleur;
 	private String valeur;
+	//private boolean specialOrnot; //是否为功能牌
 	private String couleurValeur;  //花色数值
 	//private String position;  //牌的位置：玩家手中或牌堆或弃牌堆
 	
@@ -24,6 +25,12 @@ public class Carte {
 	
 	public String getCouleur(){//得到花色
 		return this.couleur;
+	}
+	public void setCouleur(String couleur){//只用于打出8后 改变上一个出来的花色
+		this.couleur = couleur;
+	}
+	public void setValeur(String valeur){//用于特殊功能牌
+		this.valeur = valeur;
 	}
 	
 	public String getCouVale(){//得到花色数值

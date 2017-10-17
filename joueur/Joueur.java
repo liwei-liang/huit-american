@@ -11,7 +11,7 @@ public abstract class Joueur {
 	public String Name;
 	public int Number; 
 	public ArrayList<Carte> carteInhand = new ArrayList<>();  //手牌集合 选arraylist因为手里任意的牌都可以出 随机访问比较快
-	public int nombreCarteInHand;  //手牌数
+	public int nombreCarteInHand = 8;  //手牌数
 	public boolean virtuelOrNot;  //是否为虚拟玩家
 	public LinkedList<Carte> canBeplayedCardInHand = new LinkedList<>();//手中可以被打出的牌 因为需要频繁删除增加 所以用linkedlist
 	

@@ -13,10 +13,11 @@ import joueur.JoueurVirtuel;
 
 public class General {
 	
-	private static int gameOver = 0;//玩家数目
-	private static int nombreJoueur = 1;//玩家数目
+	public static int nombreJoueur = 1;//玩家数目
     public static int nombreRestCarte; //牌堆剩下的牌数
-    public static String[] robName = {"Mary" , "Jack", "Steph", "Clay", "Kevin", "Marvin","FoutyTwo"}; //预设虚拟玩家姓名
+    public static int whoToPlay; //到谁的回合
+    public static boolean sens = true;//出牌方向
+    public static String[] robName = {"Mary" , "Jack", "Steph", "Clay"}; //预设虚拟玩家姓名
     public static LinkedList<Carte> piocheCarte = new LinkedList<>();//牌堆里的牌的集合 按顺序排列
     public static LinkedList<Carte> playedCarte = new LinkedList<>(); //弃牌堆里的牌集合
     public static ArrayList<Carte> canBePlayedCarte = new ArrayList<>();//可以被打出的牌的集合
@@ -26,6 +27,7 @@ public class General {
     
     public static LinkedList<Carte> shuffle(LinkedList<Carte> carte){ //洗牌模块
     	Collections.shuffle(carte);
+    	System.out.println("洗牌！");
     	return carte;
     }
     
@@ -66,6 +68,7 @@ public class General {
         			for(int i =0; i< nombreJoueurSet - 1;i++){//调用添加虚拟玩家模块 添加用户希望的游戏人数
         				General.addJoueur();
         			}
+        			nombreJoueur = nombreJoueurSet;
         			//创建用户自己
         	    	System.out.println("您进入游戏");
         	    	System.out.println("请输入您的姓名:");
@@ -98,24 +101,28 @@ public class General {
     }
     
     public static void Playing(){//正在游戏的大循环
-    	int whoToPlay = 0;
+    	whoToPlay = 0;
     	while(true){//游戏运行过程 不停调用出牌方法
     		joueurTotal.get(whoToPlay).jouerUnCarte();//出牌模块
     		if(joueurTotal.get(whoToPlay).getNumCarteInhand() == 0){//该玩家手牌数为0 游戏结束 该玩家获胜
     			System.out.println("游戏结束," + joueurTotal.get(whoToPlay).getName() + "获得胜利!");
-    			break;
+    			return;
     		}
     		System.out.println("\n上一张被打出的牌是:" + lastPlayedCarte.getCouVale());//提示上一张被打出的牌
     		//进入下一个玩家回合
-    		if(whoToPlay < nombreJoueur-1){
-    			whoToPlay ++;
-    		}
-    		else{
-    			whoToPlay = 0;
-    		}//else
-    		if(gameOver == 1){//游戏结束退出程序
-    			return;
-    		}
+    		if(sens){//如果方向为正
+    			if(whoToPlay < nombreJoueur-1){//正常进入下一个玩家的回合
+    				whoToPlay ++;
+    			}else{
+    				whoToPlay = 0;
+    			}//else
+    		}else{//逆时针打牌
+    			if(whoToPlay > 0){//正常进入下一个玩家的回合
+    				whoToPlay --;
+    			}else{
+    				whoToPlay = joueurTotal.size()-1;
+    			}//else
+    		}//if else sens 
     	}//while
     }
   
@@ -131,6 +138,5 @@ public class General {
 		}
         sc.close();
 	}//main
-	
 	
 }

@@ -6,7 +6,7 @@ public class As extends Carte {
 		super(couleur,valeur);
 	}
 	
-	public void attaque(){//攻击后一个玩家使他抽两张牌
+	public static void attaque(){//攻击后一个玩家使他抽两张牌
 		
 	}
 	
